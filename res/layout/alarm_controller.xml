@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#222222"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/ic_launcher"
+            android:contentDescription="@string/imageDescp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/app_name"
+            android:textColor="#666666"
+            android:textSize="25dp"
+            android:typeface="normal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#666666"
+        android:orientation="horizontal" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.9" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <TimePicker
+                android:id="@+id/tpAlarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dip" >
+
+                <requestFocus />
+            </TimePicker>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <CheckBox
+                    android:id="@+id/chkSnooze"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:layout_marginTop="10dip"
+                    android:text="@string/ac_chksnooze"
+                    android:textSize="20dip" />
+
+                <EditText
+                    android:id="@+id/etxtSnoozeMin"
+                    android:layout_width="50dip"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dip"
+                    android:ems="10"
+                    android:inputType="number" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dip"
+                    android:text="@string/txt_minutes"
+                    android:textSize="20dip" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnSetTone"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dip"
+                android:text="@string/btn_SetAlarmTone" />
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="#666666"
+        android:orientation="horizontal" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/btnSetAlarm"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_margin="10dip"
+            android:layout_weight="0.1"
+            android:text="@string/btn_setAlarm" />
+    </LinearLayout>
+
+</LinearLayout>

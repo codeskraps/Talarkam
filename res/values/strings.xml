@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Talarkam</string>
+    <string name="iconImageDescription">Icon</string>
+    <!-- Alarm Controller -->
+    <string name="ac_chksnooze">Snooze every</string>
+    <string name="txt_minutes">Minutes</string>
+    <string name="btn_setAlarm">Set Alarm</string>
+    <string name="tst_alarmSchedule">Alarm scheduled:</string>
+    <string name="imageDescp">Talarkam Logo</string>
+    <string name="btn_SetAlarmTone">Set alarm tone...</string>
+    <string-array name="alanguages">
+        <item>None</item>
+        <item>English_US</item>
+        <item>English_UK</item>
+        <item>French</item>
+        <item>German</item>
+        <item>Italian</item>
+        <item>Spanish</item>
+    </string-array>
+    <string-array name="alanguages_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </string-array>
+    <!-- Alarm Off -->
+    <string name="ao_btnStop">Stop Alarm</string>
+    
+    <!-- Prefs -->
+    <string name="pf_catGeneral">General Settings</string>
+    <string name="pf_languageTitle">Language</string>
+    <string name="pf_languageDialogueTitle">Select language</string>
+    <string name="pf_languageMissingTittle">Language Package Missing</string>
+    <string name="pf_languageMissingSummary">Would you like to download the language package?</string>
+    <string name="yes">yes</string>
+    <string name="no">no</string>
+    <string name="pf_ringToneTitle">Alarm</string>
+    <string name="pf_catFeedbackTitle">Feedback/Donation</string>
+    <string name="pf_DonationTitle">Buy me a beer</string>
+    <string name="pf_DonationSummary">Help me to keep my apps free and without adds</string>
+    <string name="pf_FeedBackTitle">Feedback</string>
+    <string name="pf_FeedBackSummary">A bit of love (send feedback)</string>
+    <string name="pf_catInfo">Information</string>
+    <string name="pf_infoTitle">Talarkam v1.0</string>
+    <string name="pf_infoSummary">Codeskraps - 2012</string>
+    
+    <!-- Donation -->
+    <string name="donationSummary">Talarkam is a free and open source app. You can support it with a small donation.\n\nAny donations will help to keep my apps free and regularly updated.\n\nDonation is easy: touch any of the beers below and you will be redirected to Google Play where you can make a little Donation.</string>
+    <string name="donationOne">€ 1.00</string>
+    <string name="donationTwo">€ 2.00</string>
+    <string name="donationFive">€ 5.00</string>
+    <string name="donationTen">€ 10.00</string>
+</resources>

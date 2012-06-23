@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="@string/pf_catGeneral" >
+        <ListPreference
+            android:defaultValue="0"
+            android:dialogTitle="@string/pf_languageDialogueTitle"
+            android:entries="@array/alanguages"
+            android:entryValues="@array/alanguages_values"
+            android:key="lstLanguage"
+            android:title="@string/pf_languageTitle" />
+
+        <RingtonePreference
+            android:key="ringTone"
+            android:ringtoneType="alarm"
+            android:showDefault="true"
+            android:title="@string/pf_ringToneTitle" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pf_catFeedbackTitle" >
+        <Preference
+            android:key="donation"
+            android:summary="@string/pf_DonationSummary"
+            android:title="@string/pf_DonationTitle" />
+        <Preference
+            android:key="prefFeedBack"
+            android:summary="@string/pf_FeedBackSummary"
+            android:title="@string/pf_FeedBackTitle" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pf_catInfo" >
+        <Preference
+            android:summary="@string/pf_infoSummary"
+            android:title="@string/pf_infoTitle" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
