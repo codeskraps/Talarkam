@@ -22,10 +22,7 @@
 
 package com.codeskraps.talarkam;
 
-import java.io.File;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Locale;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -35,7 +32,7 @@ import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
+import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -48,10 +45,11 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-public class TalarkamActivity extends Activity {
+public class TalarkamActivity extends Activity implements OnClickListener {
 	private static final String TAG = TalarkamActivity.class.getSimpleName();
 	private static final int MY_DATA_CHECK_CODE = 99;
 	private static final int TONE_SELECT = 98;
@@ -62,6 +60,8 @@ public class TalarkamActivity extends Activity {
 	private static final String SNOOZE_T = "snoozet";
 	private static final String TONE = "tone";
 	private static final String FIRST_LAUNCH = "firstlaunch";
+	private static final String CHKVOLUME = "chkVolume";
+	private static final String SKBVOLUME = "skbVolume";
 
 	private SharedPreferences prefs = null;
 	private Toast mToast = null;
@@ -69,6 +69,8 @@ public class TalarkamActivity extends Activity {
 	private CheckBox chkSnooze = null;
 	private EditText etxtSnoozeMin = null;
 	private Button btnSetTone = null;
+	private CheckBox chkVolume = null;
+	private SeekBar skbVolume = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -83,19 +85,12 @@ public class TalarkamActivity extends Activity {
 		chkSnooze = (CheckBox) findViewById(R.id.chkSnooze);
 		etxtSnoozeMin = (EditText) findViewById(R.id.etxtSnoozeMin);
 		Button button = (Button) findViewById(R.id.btnSetAlarm);
-		button.setOnClickListener(setAlarmListener);
-
 		btnSetTone = (Button) findViewById(R.id.btnSetTone);
-		btnSetTone.setOnClickListener(setTone);
-
-		tpAlarm.setCurrentHour(prefs.getInt(M_HOUR, 0));
-		tpAlarm.setCurrentMinute(prefs.getInt(M_MINT, 0));
-		chkSnooze.setChecked(prefs.getBoolean(M_SNOOZE, false));
-		etxtSnoozeMin.setText(prefs.getString(SNOOZE_T, "0"));
-
-		Locale loc = new Locale("en");
-		Log.i(TAG, Arrays.toString(loc.getAvailableLocales()));
-
+		chkVolume = (CheckBox) findViewById(R.id.chkVolume);
+		skbVolume = (SeekBar) findViewById(R.id.skbVolume);
+		
+		button.setOnClickListener(setAlarmListener);
+		btnSetTone.setOnClickListener(this);
 	}
 
 	@Override
@@ -107,11 +102,14 @@ public class TalarkamActivity extends Activity {
 		tpAlarm.setCurrentMinute(prefs.getInt(M_MINT, 0));
 		chkSnooze.setChecked(prefs.getBoolean(M_SNOOZE, false));
 		etxtSnoozeMin.setText(prefs.getString(SNOOZE_T, "0"));
+		chkVolume.setChecked(prefs.getBoolean(CHKVOLUME, false));
+		skbVolume.setProgress(prefs.getInt(SKBVOLUME, 0));
 
-		if (prefs.getString(TONE, null) != null) {
-			String tone = prefs.getString(TONE, null);
-			File f = new File("" + tone);
-			btnSetTone.setText("Tone " + f.getName());
+		Uri alarmUri = Uri.parse(prefs.getString(TONE, null));
+		Ringtone ringtone = RingtoneManager.getRingtone(this, alarmUri);
+		if (ringtone != null) {
+			String name = ringtone.getTitle(this);
+			btnSetTone.setText(name);
 		} else
 			btnSetTone.setText(getString(R.string.btn_SetAlarmTone));
 
@@ -119,29 +117,52 @@ public class TalarkamActivity extends Activity {
 			Intent checkIntent = new Intent();
 			checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
 			startActivityForResult(checkIntent, MY_DATA_CHECK_CODE);
-			
+
 			SharedPreferences.Editor editor = prefs.edit();
-			
+
 			editor.putBoolean(FIRST_LAUNCH, false);
 			editor.commit();
 		}
 	}
 
-	private OnClickListener setTone = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
-			intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE,
-					RingtoneManager.TYPE_NOTIFICATION);
-			intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Tone");
+	@Override
+	protected void onPause() {
+		Log.d(TAG, "onPause");
+		super.onPause();
+
+		SharedPreferences.Editor editor = prefs.edit();
+
+		editor.putInt(M_HOUR, tpAlarm.getCurrentHour());
+		editor.putInt(M_MINT, tpAlarm.getCurrentMinute());
+		editor.putBoolean(M_SNOOZE, chkSnooze.isChecked());
+		editor.putString(SNOOZE_T, etxtSnoozeMin.getText().toString());
+		editor.putBoolean(CHKVOLUME, chkVolume.isChecked());
+		editor.putInt(SKBVOLUME, skbVolume.getProgress());
+
+		editor.commit();
+	}
+
+	@Override
+	public void onClick(View v) {
+		Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE,
+				RingtoneManager.TYPE_ALARM);
+		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Alarm");
+		if (prefs.getString(TONE, null) == null) {
 			intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI,
 					(Uri) null);
-			TalarkamActivity.this.startActivityForResult(intent, TONE_SELECT);
+		} else {
+			Log.d(TAG, "Uri: " + prefs.getString(TONE, null));
+			intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI,
+					Uri.parse(prefs.getString(TONE, null)));
 		}
-	};
+		TalarkamActivity.this.startActivityForResult(intent, TONE_SELECT);
+	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Log.d(TAG, "onActivityResult");
+
 		if (resultCode == Activity.RESULT_OK && requestCode == TONE_SELECT) {
 			Uri uri = data
 					.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
@@ -153,12 +174,14 @@ public class TalarkamActivity extends Activity {
 				editor.putString(TONE, uri.toString());
 				editor.commit();
 
-				File f = new File("" + uri);
-				if (!f.getName().equals(new String("")))
-					btnSetTone.setText("Tone " + f.getName());
-				else
+				Uri alarmUri = Uri.parse(prefs.getString(TONE, null));
+				Ringtone ringtone = RingtoneManager.getRingtone(this, alarmUri);
+				if (ringtone != null) {
+					String name = ringtone.getTitle(this);
+					btnSetTone.setText(name);
+				} else
 					btnSetTone.setText(getString(R.string.btn_SetAlarmTone));
-
+				
 			}
 		} else if (requestCode == MY_DATA_CHECK_CODE) {
 			if (resultCode != TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
@@ -202,7 +225,6 @@ public class TalarkamActivity extends Activity {
 		}
 		return super.onCreateDialog(id);
 	}
-	
 
 	private OnClickListener setAlarmListener = new OnClickListener() {
 		@Override
@@ -265,6 +287,8 @@ public class TalarkamActivity extends Activity {
 			editor.putInt(M_MINT, alarmMint);
 			editor.putBoolean(M_SNOOZE, chkSnooze.isChecked());
 			editor.putString(SNOOZE_T, etxtSnoozeMin.getText().toString());
+			editor.putBoolean(CHKVOLUME, chkVolume.isChecked());
+			editor.putInt(SKBVOLUME, skbVolume.getProgress());
 
 			editor.commit();
 

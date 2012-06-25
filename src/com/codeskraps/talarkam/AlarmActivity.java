@@ -57,6 +57,8 @@ public class AlarmActivity extends Activity implements OnInitListener {
 	private static final String TONE = "tone";
 	private static final String FIRST_TIME = "first_time";
 	private static final int DIALOG = 97;
+	private static final String CHKVOLUME = "chkVolume";
+	private static final String SKBVOLUME = "skbVolume";
 
 	private Toast mToast = null;
 	private Handler mTimeTaskHandler = null;
@@ -91,11 +93,23 @@ public class AlarmActivity extends Activity implements OnInitListener {
 		mTalkTaskHandler.removeCallbacks(mUpdateTalkTask);
 		mTalkTaskHandler.postDelayed(mUpdateTalkTask, 0);
 
-		setVolumeControlStream(TextToSpeech.Engine.DEFAULT_STREAM);
-		
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putBoolean(FIRST_TIME, true);
 		editor.commit();
+
+		if (prefs.getBoolean(CHKVOLUME, false)) {
+			AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
+			int maxVol = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+			int setVol = (maxVol * prefs.getInt(SKBVOLUME, 0)) / 100;
+			Log.d(TAG, "maxVol: " + maxVol + ", setting: " + setVol);
+			
+			am.setStreamVolume(AudioManager.STREAM_MUSIC, setVol,
+					AudioManager.FLAG_VIBRATE);
+
+			am.setStreamVolume(AudioManager.STREAM_ALARM, setVol,
+					AudioManager.FLAG_VIBRATE);
+		}
 	}
 
 	private Runnable mUpdateTimeTask = new Runnable() {
@@ -290,6 +304,7 @@ public class AlarmActivity extends Activity implements OnInitListener {
 	@Override
 	public void onDestroy() {
 		Log.d(TAG, "onDestroy");
+		super.onDestroy();
 
 		if (mTts != null) {
 			mTts.stop();
@@ -298,8 +313,6 @@ public class AlarmActivity extends Activity implements OnInitListener {
 
 		mTimeTaskHandler.removeCallbacks(mUpdateTimeTask);
 		mTalkTaskHandler.removeCallbacks(mUpdateTalkTask);
-
-		super.onDestroy();
 	}
 
 	@Override

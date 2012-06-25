@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!-- 
+<!--
   Talarkam
   Copyright (C) Carles Sentis 2011 <codeskraps@gmail.com>
  
@@ -26,6 +25,19 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="0px"
+        android:layout_height="0px"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
+
+    <!-- <AutoCompleteTextView -->
+    <!-- android:id="@+id/autotext" -->
+    <!-- android:layout_width="fill_parent" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:nextFocusLeft="@id/autotext" -->
+    <!-- android:nextFocusUp="@id/autotext" /> -->
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -72,8 +84,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dip" >
-
-                <requestFocus />
             </TimePicker>
 
             <LinearLayout
@@ -87,8 +97,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dip"
                     android:layout_marginTop="10dip"
-                    android:text="@string/ac_chksnooze"
-                    android:textSize="20dip" />
+                    android:text="@string/ac_chksnooze" />
 
                 <EditText
                     android:id="@+id/etxtSnoozeMin"
@@ -96,14 +105,17 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dip"
                     android:ems="10"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:nextFocusLeft="@id/etxtSnoozeMin"
+                    android:nextFocusUp="@id/etxtSnoozeMin"
+                    android:selectAllOnFocus="true" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dip"
                     android:text="@string/txt_minutes"
-                    android:textSize="20dip" />
+                    android:textAppearance="@android:style/TextAppearance" />
             </LinearLayout>
 
             <Button
@@ -112,6 +124,24 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dip"
                 android:text="@string/btn_SetAlarmTone" />
+
+            <CheckBox
+                android:id="@+id/chkVolume"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:text="@string/setVolume" />
+
+            <SeekBar
+                android:id="@+id/skbVolume"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dip"
+                android:layout_marginRight="15dip"
+                android:layout_marginTop="10dip"
+                android:max="100" />
+
+            <!-- android:progressDrawable="@drawable/progress" -->
         </LinearLayout>
     </ScrollView>
 

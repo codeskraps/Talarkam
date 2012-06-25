@@ -33,6 +33,7 @@
     <string name="tst_alarmSchedule">Alarm scheduled:</string>
     <string name="imageDescp">Talarkam Logo</string>
     <string name="btn_SetAlarmTone">Set alarm tone...</string>
+    <string name="setVolume">Set alarm volume</string>
     <string-array name="alanguages">
         <item>None</item>
         <item>English_US</item>
